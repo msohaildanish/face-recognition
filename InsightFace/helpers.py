@@ -6,13 +6,14 @@ def show_dets(image, dets, vis_thres, names=[]):
     for i, b in enumerate(dets):
         if b[4] < vis_thres:
             continue
-        text = "{}".format(names[i])
         b = list(map(int, b))
         cv2.rectangle(image, (b[0], b[1]), (b[2], b[3]), (0, 0, 255), 2)
         cx = b[0]
         cy = b[1] + 12
-        cv2.putText(image, text, (cx, cy),
-                    cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255))
+        if names:
+            text = "{}".format(names[i])
+            cv2.putText(image, text, (cx, cy),
+                        cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255))
     return image
 
 def get_faces(image, dets, vis_thres=0.6):

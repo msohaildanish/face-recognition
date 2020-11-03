@@ -4,6 +4,7 @@ import numpy as np
 import torch
 import torch.backends.cudnn as cudnn
 
+
 from retinaface.data import cfg_mnet
 from retinaface.layers.functions.prior_box import PriorBox
 from retinaface.loader import load_model
@@ -12,12 +13,12 @@ from retinaface.utils.nms.py_cpu_nms import py_cpu_nms
 
 
 class RetinafaceDetector:
-    def __init__(self, net='mnet'):
+    def __init__(self, net='mnet', weights_path='retinaface/weights/mobilenet0.25_Final.pth'):
         cudnn.benchmark = True
         self.net = net
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # sets device for model and PyTorch tensors
         print(self.device)
-        self.model = load_model(net).to(self.device)
+        self.model = load_model(net, weights_path).to(self.device)
         self.model.eval()
 
     def detect_faces(self, img_raw, confidence_threshold=0.9, top_k=5000, nms_threshold=0.4, keep_top_k=750, resize=1):

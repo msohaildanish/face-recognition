@@ -18,8 +18,9 @@ def walkdir(folder, ext):
 
 class Recognizer(object):
     
-    def __init__(self, database_path, mode='val', threshold=1.05):
+    def __init__(self, database_path, mode='val', threshold=1.0, weights_path='insight-face-v3.pt'):
         self.database_path = database_path
+        self.weights_path = weights_path
         self.model = self.load_model()
         self.database = self.load_database()
         self.transformer = data_transforms[mode]
@@ -28,7 +29,7 @@ class Recognizer(object):
         
     def load_model(self):
         model = resnet101()
-        model.load_state_dict(torch.load('insight-face-v3.pt',  map_location=torch.device(device)))
+        model.load_state_dict(torch.load(self.weights_path,  map_location=torch.device(device)))
         # model = nn.DataParallel(model)
         model = model.to(device)
         return model
@@ -122,7 +123,7 @@ class Recognizer(object):
                 # dist = np.sum(np.square(face - embd)) ** 0.5
                 dist = ((embd - face) ** 2).sum() ** 0.5
                 dist_this.append(dist)
-                print(dist)
+                # print(dist)
             min_dist = min(dist_this)
             number = dist_this.index(min_dist)
             print(labels[number], min_dist)
@@ -144,6 +145,12 @@ class Recognizer(object):
         for i, face in enumerate(images):
             imgs[i] = self.transformer(face)
         return imgs.to(device)
+    
+    def recognize_frame(self, faces):
+        faces_btch = self.get_image_batch(faces)
+        embds = self.get_embeddings(faces_btch)
+        names = self.recognize(embds)
+        return names
             
     
 

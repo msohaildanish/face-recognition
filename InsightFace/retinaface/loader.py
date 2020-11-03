@@ -26,9 +26,9 @@ def remove_prefix(state_dict, prefix):
     return {f(key): value for key, value in state_dict.items()}
 
 
-def load_model(net='mnet', ):
+def load_model(net='mnet', pretrained_path='retinaface/weights/mobilenet0.25_Final.pth'):
     if net == 'mnet':
-        pretrained_path = 'retinaface/weights/mobilenet0.25_Final.pth'
+        pretrained_path = pretrained_path
         # print('Loading pretrained model from {}'.format(pretrained_path))
         model = RetinaFace(cfg=cfg_mnet, phase='test')
     else:

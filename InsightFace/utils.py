@@ -8,7 +8,7 @@ import torch
 # from models import resnet101
 from align_faces import get_reference_facial_points, warp_and_crop_face
 from config import im_size
-from retinaface.detector import detector
+from retinaface.detector import RetinafaceDetector
 from config import device
 
 

@@ -1,0 +1,10 @@
+torch==1.6.0
+torchsummary==1.5.1
+torchvision==0.7.0
+opencv-python==4.4.0.44
+numpy==1.18.5
+matplotlib
+scipy
+tqdm
+pillow
+scikit-image
