@@ -22,12 +22,12 @@ Download the weights in the root dir
 
 1. Crop your face image and save it
 ```bash
-$ python photograph.py
+$ python photograph.py --name Danish --output-dir data/images/faces
 ```
 
 2. Genetate face embeddings and update the database
 ```bash
-$ python create_database.py
+$ python create_database.py --faces-dir data/images/faces --database-dir data/database
 ```
 
 3. Test the result using webcam.
