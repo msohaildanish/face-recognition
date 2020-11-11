@@ -221,6 +221,19 @@ def walkdir(folder, ext):
     for dirpath, dirs, files in os.walk(folder):
         for filename in [f for f in files if f.lower().endswith(ext)]:
             yield os.path.abspath(os.path.join(dirpath, filename))
+            
+            
+def get_faces(image, dets, landms, vis_thres=0.6):
+    size = (112, 112)
+    faces = []
+    for i, b in enumerate(dets):
+        if b[4] < vis_thres:
+            continue
+        
+        landm = landms[i]
+        face = align_face(image, [landm])
+        faces.append(face)
+    return faces
     
     
 # def load_model():

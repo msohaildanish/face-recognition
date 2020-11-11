@@ -44,24 +44,24 @@ class RetinafaceDetector:
         boxes = boxes * scale / resize
         boxes = boxes.cpu().numpy()
         scores = conf.squeeze(0).data.cpu().numpy()[:, 1]
-        # landms = decode_landm(landms.data.squeeze(0), prior_data, cfg_mnet['variance'])
-        # scale1 = torch.Tensor([img.shape[3], img.shape[2], img.shape[3], img.shape[2],
-        #                        img.shape[3], img.shape[2], img.shape[3], img.shape[2],
-        #                        img.shape[3], img.shape[2]])
-        # scale1 = scale1.to(self.device)
-        # landms = landms * scale1 / resize
-        # landms = landms.cpu().numpy()
+        landms = decode_landm(landms.data.squeeze(0), prior_data, cfg_mnet['variance'])
+        scale1 = torch.Tensor([img.shape[3], img.shape[2], img.shape[3], img.shape[2],
+                               img.shape[3], img.shape[2], img.shape[3], img.shape[2],
+                               img.shape[3], img.shape[2]])
+        scale1 = scale1.to(self.device)
+        landms = landms * scale1 / resize
+        landms = landms.cpu().numpy()
 
         # ignore low scores
         inds = np.where(scores > confidence_threshold)[0]
         boxes = boxes[inds]
-        # landms = landms[inds]
+        landms = landms[inds]
         scores = scores[inds]
 
         # keep top-K before NMS
         order = scores.argsort()[::-1][:top_k]
         boxes = boxes[order]
-        # landms = landms[order]
+        landms = landms[order]
         scores = scores[order]
 
         # do NMS
@@ -69,20 +69,19 @@ class RetinafaceDetector:
         keep = py_cpu_nms(dets, nms_threshold)
         # keep = nms(dets, args.nms_threshold,force_cpu=args.cpu)
         dets = dets[keep, :]
-        # landms = landms[keep]
+        landms = landms[keep]
 
         # keep top-K faster NMS
         dets = dets[:keep_top_k, :]
-        # landms = landms[:keep_top_k, :]
+        landms = landms[:keep_top_k, :]
         # print(landms.shape)
-        # landms = landms.reshape((-1, 5, 2))
+        landms = landms.reshape((-1, 5, 2))
         # print(landms.shape)
-        # landms = landms.transpose((0, 2, 1))
+        landms = landms.transpose((0, 2, 1))
         # print(landms.shape)
-        # landms = landms.reshape(-1, 10, )
+        landms = landms.reshape(-1, 10, )
         # print(landms.shape)
 
-        return dets, []
-
+        return dets, landms
 
 # detector = RetinafaceDetector(net='mnet')

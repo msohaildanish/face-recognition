@@ -3,13 +3,15 @@ import numpy as np
 import cv2
 import time
 import argparse
-# from InsightFace_PyTorch.utils import load_model
-from imutils.video import FPS
-from imutils import resize
-from helpers import get_faces, show_dets
 
 from retinaface.detector import RetinafaceDetector
 from recognizer import Recognizer
+# from InsightFace_PyTorch.utils import load_model
+from imutils.video import FPS
+from imutils import resize
+from helpers import show_dets
+from utils import align_face, get_faces
+
 
     
 
@@ -42,8 +44,9 @@ def cv_stream(detector, recognizer):
         success, frame = video.read()
         frame = resize(frame, width=700)
         if counter % 3 == 0:
-            dets, _ = detector.detect_faces(frame)
-            faces = get_faces(frame, dets)
+            dets, landms = detector.detect_faces(frame)
+            # frame = align_face(frame, landms)
+            faces = get_faces(frame, dets, landms)
             faces_btch = recognizer.get_image_batch(faces)
             embds = recognizer.get_embeddings(faces_btch)
             names = recognizer.recognize(embds)

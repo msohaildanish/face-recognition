@@ -5,4 +5,8 @@ data/lfw_funneled
 __pycache__/
 *.tar
 *.pt
-data/*
+data/b
+data/database/*
+data/images/faces/*
+data/images/done/*
+data/images/raw/*

@@ -53,17 +53,23 @@
 
 	<div class="container">
 		<div class="text-center">
-			<div id="alerts"></div>
-			<h3>Actions</h3>
-			<button type="button" onclick="update_database()" class="btn btn-primary btn-lg">Update Database</button>
+			<button type="button" onclick="show_demo()" class="btn btn-primary btn-lg">Show Demo</button>
 			<!-- Add your site or application content here -->
-			
+			<div id="video_demo" style="display: none;">
+				<h1>Video Streaming Demonistration</h1>
+				<img id="bg" class="center" src="{{ url_for('video_demo') }}">
+			</div>
 		</div>
 	</div>
 
 	<script>
-		function update_database(){
-			
+		function show_demo(){
+			var x = document.getElementById("video_demo");
+			if (x.style.display === "none") {
+				x.style.display = "block";
+			} else {
+				x.style.display = "none";
+			}
 		}
 	</script>
 </body>
